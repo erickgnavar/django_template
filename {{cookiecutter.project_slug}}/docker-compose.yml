@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  web:
+    restart: unless-stopped
+    build: .
+    network_mode: 'host'
+    working_dir: /app
+    env_file:
+      - .env
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./static:/app/static
+      - ./media:/app/media

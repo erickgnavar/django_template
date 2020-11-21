@@ -1,0 +1,52 @@
+services:
+  - name: postgres:10.0
+    alias: postgres
+  - docker:19.03.12-dind
+
+variables:
+  POSTGRES_DBNAME: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  DJANGO_SETTINGS_MODULE: config.settings.test
+  SECRET_KEY: secret
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+python_linter:
+  stage: lint
+  image: python:3.8.6-slim-buster
+  script:
+    - pip install poetry
+    - poetry install
+    - poetry run flake8 .
+    - poetry run black --check .
+
+js_linter:
+  stage: lint
+  image: node:12.19.0-stretch-slim
+  script:
+    - npm install
+    - ./node_modules/.bin/prettier --check .
+
+test_python:
+  image: python:3.8.6-slim-buster
+  stage: test
+  script:
+    - pip install poetry
+    - poetry install
+    - poetry run pytest --cov
+
+build_docker_image:
+  image: docker:19.03.12
+  stage: build
+  only:
+    - master
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA

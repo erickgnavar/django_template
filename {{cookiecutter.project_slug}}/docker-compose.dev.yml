@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  db:
+    restart: unless-stopped
+    image: postgres:10-alpine
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: {{cookiecutter.project_slug}}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - '8025:8025'
+
+  web:
+    restart: unless-stopped
+    container_name: django_devserver
+    depends_on:
+      - db
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    env_file:
+      - .env
+    links:
+      - db
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./:/app

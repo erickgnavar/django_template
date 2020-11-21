@@ -1,0 +1,44 @@
+{% raw %}
+{% load static i18n %}
+<header>
+  <div class="container">
+    <nav class="navbar navbar-expand-md">
+      <a class="navbar-brand" href="{% url "pages:home" %}">
+        logo
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="{% trans "Toggle navigation" %}">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="main-navbar">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "pages:home" %}">{% trans "Home" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "pages:contact" %}">{% trans "Contact" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "pages:cookies" %}">{% trans "Cookies" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "pages:privacy" %}">{% trans "Privacy" %}</a>
+          </li>
+          {% if request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link btn-navbar" href="{% url "users:logout" %}">{% trans "Logout" %}</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link btn-navbar" href="{% url "users:signup" %}">{% trans "Create account" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn-navbar" href="{% url "users:login" %}">{% trans "Login" %}</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>
+{% endraw %}

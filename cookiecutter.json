@@ -1,0 +1,5 @@
+{
+  "project_name": "Demo project",
+  "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}",
+  "project_short_description": "Simple django base template"
+}

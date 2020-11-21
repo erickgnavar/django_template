@@ -1,0 +1,40 @@
+{% raw %}
+{% extends "base.html" %}
+{% load i18n static form_tags %}
+{% block content %}
+  <div class="container">
+    <row>
+      <div class="col-md-6 offset-md-3">
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          {% for error in form.non_field_errors %}
+            <div class="alert alert-warning">{{ error }}</div>
+          {% endfor %}
+
+          {% field form.username %}
+          {% field form.password %}
+
+          <hr/>
+
+          <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans "Sign in" %}</button>
+          <br/>
+          <div class="text-center">
+            <a href="{% url "users:forgot-password" %}">
+              {% trans "Forgot password?" %}
+            </a>
+          </div>
+          <div class="text-center">
+            <a href="{% url "users:signup" %}">
+              {% trans "Create account" %}
+            </a>
+          </div>
+        </form>
+      </div>
+    </row>
+  </div>
+  <br/>
+  <br/>
+  <br/>
+{% endblock content %}
+{% endraw %}
