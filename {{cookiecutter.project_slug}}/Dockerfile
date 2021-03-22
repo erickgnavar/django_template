@@ -4,7 +4,7 @@ FROM python:3.8.6-slim-buster
 WORKDIR /app
 
 # Install system libraries
-RUN apt update && apt install python-dev postgresql-client libxslt-dev libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev -y
+RUN apt update && apt install python-dev postgresql-client libxslt-dev libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev gettext -y
 
 # Install poetry so we can use it to install all the dependencies
 RUN pip install poetry
@@ -18,6 +18,9 @@ RUN poetry config virtualenvs.create false && poetry install
 
 # Bundle app source
 COPY . /app
+
+# Compile translations, this should be runned with django-admin because we don't have access to the whole project setup at build time
+RUN django-admin compilemessages
 
 EXPOSE 8000
 
